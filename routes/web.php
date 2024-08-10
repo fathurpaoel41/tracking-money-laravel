@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\WalletController;
 
 Route::get('/', function () {
     return view('content/dashboard');
@@ -17,6 +18,9 @@ Route::middleware('auth')->group(function () {
         return view('content/dashboard');
     })->name("dashboard");
     Route::get('/logout',[AuthenticationController::class, 'logout'])->name('logout');
+
+    Route::get('/wallet',[WalletController::class,'viewWallet'])->name('wallet');
+    Route::post('/addWallet',[WalletController::class,'addWallet'])->name("addWallet");
     
 });
 

@@ -138,7 +138,7 @@
               <h4 class="mb-2">Track Your in/out Money</h4>
               <p class="mb-4">Make your app management easy and fun!</p>
               <form class="mb-3" action="{{ route('register') }}" method="POST">
-    @csrf
+            @csrf
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input
