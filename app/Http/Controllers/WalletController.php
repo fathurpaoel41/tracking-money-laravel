@@ -9,7 +9,21 @@ use Illuminate\Http\Request;
 class WalletController extends Controller
 {
     public function viewWallet(){
-        return view("content.wallet");
+        $dataWallet = WalletModel::get();
+        
+        // // Menghitung jumlah wallet menggunakan loop
+        // $countWallet = 0;
+        // foreach ($dataWallet as $wallet) {
+        //     $countWallet++;
+        // }
+    
+        // Atau menggunakan fungsi count() PHP
+        $countWallet = count($dataWallet);
+    
+        return view("content.wallet", [
+            'dataWallet' => $dataWallet,
+            'countWallet' => $countWallet
+        ]);
     }
 
     public function addWallet(Request $request){
@@ -18,12 +32,9 @@ class WalletController extends Controller
             'deskripsi_dompet' => 'required'
         ]);
 
-        $user = Auth::user();
-        // dd($user);
-
         $wallet = WalletModel::create([
             'id_dompet' => \Illuminate\Support\Str::uuid()->toString(),
-            'id_user' => $user->id,
+            'id_user' => Auth::user()->getAttributes()['id_user'],
             'nama_dompet' => $request->nama_dompet,
             'deskripsi_dompet' => $request->deskripsi_dompet
         ]);

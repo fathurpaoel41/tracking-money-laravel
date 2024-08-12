@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Dashboard')
+@section('title', 'Wallet')
 
 @section('content')
     <!-- Content -->
@@ -22,9 +22,14 @@
                        
                           <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
                           <p class="mb-4">
-                            Kamu hanya mempunyai maksimal 3 wallet <a href="javascript:;" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                            data-bs-target="#basicModal">Tambah Wallet</a>
-                          </p>
+                            Kamu hanya mempunyai maksimal 3 wallet
+                            @if($countWallet < 3)
+                                <a href="javascript:;" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#basicModal">Tambah Wallet</a>
+                            @else
+                                <button class="btn btn-sm btn-outline-primary" disabled>Tambah Wallet</button>
+                            @endif
+                        </p>
+                        
                           <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -38,30 +43,27 @@
                                 ></button>
                               </div>
                               <div class="modal-body">
-                              <form class="mb-3" action="{{ route('addWallet') }}" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="nameBasic" class="form-label">Name Wallet</label>
-                                        <input type="text" id="nameBasic" class="form-control @error('nama_dompet') is-invalid @enderror" placeholder="Enter Name Wallet" name="nama_dompet" value="{{ old('nama_dompet') }}" />
-                                        @error('nama_dompet')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                              <form class="mb-3" action="{{ route('addWallet') }}" method="POST" id="walletForm">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="nameWallet" class="form-label">Name Wallet</label>
+                                            <input type="text" id="nameWallet" class="form-control" placeholder="Enter Name Wallet" name="nama_dompet" />
+                                            <div class="invalid-feedback" id="nama_dompet_error"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="exampleFormControlTextarea1" class="form-label">Deskription Wallet</label>
-                                        <textarea class="form-control @error('deskripsi_dompet') is-invalid @enderror" name="deskripsi_dompet" id="exampleFormControlTextarea1" rows="3">{{ old('deskripsi_dompet') }}</textarea>
-                                        @error('deskripsi_dompet')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="descriptionWallet" class="form-label">Deskription Wallet</label>
+                                            <textarea class="form-control" name="deskripsi_dompet" id="descriptionWallet" rows="3"></textarea>
+                                            <div class="invalid-feedback" id="deskripsi_dompet_error"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <button class="btn btn-primary d-grid w-100" type="submit">Add Wallet</button>
-                                </div>
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary d-grid w-100" type="submit">Add Wallet</button>
+                                    </div>
                                 </form>
+                               
                               </div>
                             </div>
                           </div>
@@ -80,6 +82,22 @@
                     </div>
                   </div>
                 </div>
+                <h6 class="pb-1 mb-4 text-muted">Dompet Anda</h6>
+              <div class="row mb-5">
+              @foreach($dataWallet as $wallet)
+                <div class="col-md-6 col-lg-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ $wallet->nama_dompet }}</h5>
+                      <p class="card-text">
+                      {{ $wallet->deskripsi_dompet }}
+                      </p>
+                      <!-- <a href="javascript:void(0)" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                  </div>
+                </div>
+                @endforeach
+              </div>
                 <!-- End Row -->    
                 </div>
               </div>
@@ -90,3 +108,43 @@
 @section('page-scripts')
     <script src="{{ asset('/assets/js/dashboards-analytics.js') }}"></script>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('walletForm');
+    const nameInput = document.getElementById('nameWallet');
+    const descriptionInput = document.getElementById('descriptionWallet');
+
+    function validateInput(input, errorId, errorMessage) {
+        const errorElement = document.getElementById(errorId);
+        if (input.value.trim() === '') {
+            input.classList.add('is-invalid');
+            errorElement.textContent = errorMessage;
+            return false;
+        } else {
+            input.classList.remove('is-invalid');
+            errorElement.textContent = '';
+            return true;
+        }
+    }
+
+    nameInput.addEventListener('input', function() {
+        validateInput(this, 'nama_dompet_error', 'Name Wallet is required');
+    });
+
+    descriptionInput.addEventListener('input', function() {
+        validateInput(this, 'deskripsi_dompet_error', 'Description Wallet is required');
+    });
+
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        isValid = validateInput(nameInput, 'nama_dompet_error', 'Name Wallet is required') && isValid;
+        isValid = validateInput(descriptionInput, 'deskripsi_dompet_error', 'Description Wallet is required') && isValid;
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
