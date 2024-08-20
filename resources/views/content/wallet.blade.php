@@ -83,21 +83,22 @@
                   </div>
                 </div>
                 <h6 class="pb-1 mb-4 text-muted">Dompet Anda</h6>
-              <div class="row mb-5">
-              @foreach($dataWallet as $wallet)
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">{{ $wallet->nama_dompet }}</h5>
-                      <p class="card-text">
-                      {{ $wallet->deskripsi_dompet }}
-                      </p>
-                      <!-- <a href="javascript:void(0)" class="btn btn-primary">Go somewhere</a> -->
-                    </div>
+                <div class="row mb-5">
+                  @foreach($dataWallet as $wallet)
+                  <div class="col-md-6 col-lg-4 mb-3">
+                      <div class="card">
+                          <div class="card-body">
+                              <h5 class="card-title">{{ $wallet->nama_dompet }}</h5>
+                              <p class="card-text">
+                                  {{ $wallet->deskripsi_dompet }}
+                              </p>
+                              <a href="{{ route('detailWallet', ['id_dompet' => $wallet->id_dompet]) }}" class="btn btn-primary btn-sm">Detail</a>
+                          </div>
+                      </div>
                   </div>
-                </div>
-                @endforeach
+                  @endforeach
               </div>
+
                 <!-- End Row -->    
                 </div>
               </div>

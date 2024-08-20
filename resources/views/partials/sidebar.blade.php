@@ -81,7 +81,7 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="index.html" class="menu-link">
+              <a href="/categoryInput" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category-alt"></i>
                 <div data-i18n="Analytics">Category</div>
               </a>
