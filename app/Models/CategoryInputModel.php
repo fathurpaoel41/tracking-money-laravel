@@ -15,7 +15,8 @@ class CategoryInputModel extends Model
         'kategori_pemasukan_id',
         'nama_pemasukan',
         'deskripsi_kategori_pemasukan',
-        'icon_pemasukan'
+        'icon_pemasukan',
+        'id_user'
     ];
 
     protected $hidden = [
