@@ -72,19 +72,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="iconInput" class="form-label">Icon</label>
-                            <select class="form-select" id="iconInput" name="icon_pemasukan">
-                                <option value="">Select an icon</option>
-                                <option value="menu-icon tf-icons bx bx-wallet-alt" data-icon="bx bx-wallet-alt"><i class="menu-icon tf-icons bx bx-wallet-alt"></i>Wallet</option>
-                                <option value="menu-icon tf-icons bx bx-money" data-icon="bx bx-money">Money</option>
-                                <option value="menu-icon tf-icons bx bx-dollar" data-icon="bx bx-dollar">Dollar</option>
-                                <option value="menu-icon tf-icons bx bx-cart" data-icon="bx bx-cart"><i class="menu-icon tf-icons bx bx-cart"></i>Cart</option>
-                                <option value="menu-icon tf-icons bx bx-shopping-bag" data-icon="bx bx-shopping-bag">Shopping Bag</option>
-                                <option value="menu-icon tf-icons bx bx-credit-card" data-icon="bx bx-credit-card">Credit Card</option>
-                                <option value="menu-icon tf-icons bx bx-diamond" data-icon="bx bx-diamond">Diamond</option>
-                                <option value="menu-icon tf-icons bx bx-gift" data-icon="bx bx-gift">Gift</option>
-                                <option value="menu-icon tf-icons bx bx-coin" data-icon="bx bx-coin">Coin</option>
-                                <option value="menu-icon tf-icons bx bx-bank" data-icon="bx bx-bank">Bank</option>
-                            </select>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#iconModal">
+                                Select an Icon
+                            </button>
+                            <p id="value_icon"></p>
+                            <input type="hidden" id="selectedIcon" name="icon_pemasukan">
                             <div class="invalid-feedback" id="iconInputError"></div>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Category</button>
@@ -94,6 +86,32 @@
         </div>
     </div>
 @endsection
+
+<!-- Icon Selection Modal -->
+<div class="modal fade" id="iconModal" tabindex="-1" aria-labelledby="iconModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="iconModalLabel">Select an Icon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach(['bx-wallet-alt', 'bx-money', 'bx-dollar', 'bx-cart', 'bx-shopping-bag', 'bx-credit-card', 'bx-diamond', 'bx-gift', 'bx-coin', 'bx-bank'] as $icon)
+                        <div class="col-md-3 mb-3">
+                            <div class="card icon-card" data-icon="menu-icon tf-icons bx {{ $icon }}">
+                                <div class="card-body text-center">
+                                    <i class="bx {{ $icon }} fs-1"></i>
+                                    <p class="mt-2">{{ ucfirst(str_replace('-', ' ', substr($icon, 3))) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('page-scripts')
     <script src="{{ asset('/assets/js/dashboards-analytics.js') }}"></script>
@@ -222,6 +240,36 @@
                 if (!isValid) {
                     e.preventDefault();
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const iconCards = document.querySelectorAll('.icon-card');
+            const selectedIconInput = document.getElementById('selectedIcon');
+            const addCategoryModal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
+            const iconModal = new bootstrap.Modal(document.getElementById('iconModal'));
+            const valueIconElement = document.getElementById('value_icon');
+
+            iconCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const iconClass = this.dataset.icon;
+                    selectedIconInput.value = iconClass;
+                    valueIconElement.textContent = iconClass;
+
+                    
+                    // Remove 'selected' class from all cards
+                    iconCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add 'selected' class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Close both modals
+                    iconModal.hide();
+                    addCategoryModal.hide();
+
+                    addCategoryModal.show();
+                });
             });
         });
     </script>

@@ -3,6 +3,16 @@
 <head>
     @include('partials.head')
 </head>
+<style>
+.icon-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.icon-card:hover, .icon-card.selected {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+</style>
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
