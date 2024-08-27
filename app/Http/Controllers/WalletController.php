@@ -27,7 +27,7 @@ class WalletController extends Controller
             'deskripsi_dompet' => 'required'
         ]);
 
-        $walletCount = WalletModel::where('id_user', Auth::id())->count();
+        $walletCount = WalletModel::where('id_user', Auth::user()->id_user)->count();
 
         if ($walletCount >= 3) {
             return redirect()->route('wallet')->with('error', 'Tidak dapat menambahkan wallet baru. Jumlah maksimal wallet adalah 3.');
@@ -35,7 +35,7 @@ class WalletController extends Controller
 
         $wallet = WalletModel::create([
             'id_dompet' => Str::uuid()->toString(),
-            'id_user' => Auth::id(),
+            'id_user' => Auth::user()->id_user,
             'nama_dompet' => $request->nama_dompet,
             'deskripsi_dompet' => $request->deskripsi_dompet
         ]);

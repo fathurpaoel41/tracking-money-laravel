@@ -30,7 +30,7 @@ class CategoryInputController extends Controller
         $query = CategoryInputModel::create([
             'kategori_pemasukan_id' =>  Str::uuid()->toString(),
             'nama_pemasukan' => $request->nama_pemasukan,
-            'id_user' => Auth::id(),
+            'id_user' => Auth::user()->id_user,
             'deskripsi_kategori_pemasukan' => $request->deskripsi_kategori_pemasukan,
             'icon_pemasukan' => $request->icon_pemasukan?? null,
         ]);

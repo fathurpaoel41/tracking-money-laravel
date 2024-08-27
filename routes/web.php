@@ -10,7 +10,7 @@ Route::get('/', function () {
     return view('content/dashboard');
 });
 
-Route::get('/register',[RegisterController::class, 'showRegistrationForm']);
+Route::get('/php',[RegisterController::class, 'showRegistrationForm']);
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 Route::get('/login',[AuthenticationController::class, 'viewLogin'])->name('login');
 
